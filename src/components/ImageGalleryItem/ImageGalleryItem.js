@@ -4,7 +4,7 @@ import { Modal } from 'components/Modal/Modal';
 import { LargeImage } from 'components/LargeImage/LargeImage';
 import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({ largeImageURL, webformatURL, tags }) => {
+export const ImageGalleryItem = ({ id, largeImageURL, webformatURL, tags }) => {
   const [showModal, setShowModal] = useState(false);
 
   const showModalToggle = () => {
@@ -13,7 +13,7 @@ export const ImageGalleryItem = ({ largeImageURL, webformatURL, tags }) => {
 
   return (
     <>
-      <GalleryLi>
+      <GalleryLi key={id}>
         {showModal && (
           <Modal onModalShow={showModalToggle}>
             <LargeImage imgUrl={largeImageURL} />
