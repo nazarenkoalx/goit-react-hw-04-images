@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function goSearch(query, pageNumber) {
   try {
-    const response = await axios.get('https://pixabay.com/api/', {
+    const { data } = await axios.get('https://pixabay.com/api/', {
       params: {
         key: '32613318-c4586bdc29b7e1cabb37e9d30',
         q: query,
@@ -13,8 +13,17 @@ export async function goSearch(query, pageNumber) {
         per_page: 12,
       },
     });
-    return response;
+    const totalHits = data.totalHits;
+    const pictures = data.hits.map(
+      ({ id, webformatURL, largeImageURL, tags }) => ({
+        id,
+        webformatURL,
+        largeImageURL,
+        tags,
+      })
+    );
+    return { totalHits, pictures };
   } catch (error) {
-    console.error(error);
+    throw new Error(error);
   }
 }

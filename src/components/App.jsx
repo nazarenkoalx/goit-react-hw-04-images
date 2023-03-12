@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Container } from './Container/Container.styled';
-import { goSearch } from './api/GoSearch';
+import { goSearch } from '../services/apiServices';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
 import { EmptyGal } from './ImageGallery/ImageGallery.styled';
@@ -28,11 +28,14 @@ export class App extends Component {
       this.setState({ loading: true, error: '' });
 
       await goSearch(searchQuery, page)
-        .then(response => {
+        .then(({ pictures, totalHits }) => {
+          if (pictures.length === 0) {
+            return toast.error('нема даних');
+          }
           this.setState(prevState => {
             return {
-              pictures: [...prevState.pictures, ...response.data.hits],
-              totalHits: response.data.totalHits,
+              pictures: [...prevState.pictures, ...pictures],
+              totalHits,
             };
           });
         })
